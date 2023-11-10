@@ -3,13 +3,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class Gui{
     private static CardLayout cardLayout;
     private static JPanel contentPanel;
     private ConnectionDB connection = new ConnectionDB();
 
-    public void createAndShowGUI() {
+    public void createAndShowGUI() throws SQLException {
         JFrame frame = new JFrame("EXTREME GAMES");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(450, 500);
@@ -94,24 +95,31 @@ public class Gui{
         JPanel showBuyView = new JPanel();
         JButton buttonAdd = new JButton("Agregar");
         JButton buttonBuy = new JButton("Vender");
+        TextField textNit = new TextField(10);
+        TextField textNombre = new TextField(30);
+        TextField textCant = new TextField(1);
+        TextField textDir = new TextField(43);
+        JCheckBox adultos = new JCheckBox("Adultos");
+        JCheckBox ninos = new JCheckBox("Niños");
+        JComboBox<String> listJuego = new JComboBox<>();
+        listJuego.removeAllItems();
+        for(int i = 0; i < connection.getJuegos().size(); i++){
+            String dato = connection.getJuegos().get(i).getNombre();
+            listJuego.addItem(dato);
+        }
         showBuyView.add(new JLabel("Nit:"));
-        showBuyView.add(new TextField(10));
+        showBuyView.add(textNit);
         showBuyView.add(new JLabel("Nombre:"));
-        showBuyView.add(new TextField(30));
+        showBuyView.add(textNombre);
         showBuyView.add(new JLabel("Cantidad:"));
-        showBuyView.add(new TextField(2));
-        showBuyView.add(new JLabel("Adultos"));
-        showBuyView.add(new JCheckBox());
-        showBuyView.add(new JLabel("Niños"));
-        showBuyView.add(new JCheckBox());
-        showBuyView.add(new JComboBox<>(new String[] 
-        {"Nombre de juego 1",
-         "Nombre de juego 2",
-         "Nombre de juego 3"
-        }));
+        showBuyView.add(textCant);
+        showBuyView.add(adultos);
+        showBuyView.add(ninos);
+        showBuyView.add(listJuego);
+        showBuyView.add(new JLabel("    Dirección:"));
+        showBuyView.add(textDir);
         showBuyView.add(buttonAdd);
         showBuyView.add(buttonBuy);
-
 
         // Vista para Caja
         JPanel showCajaView = new JPanel();

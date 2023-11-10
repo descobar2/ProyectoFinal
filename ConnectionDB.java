@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class ConnectionDB{
     final String HOST = "proyecto2.ctlvgikixphm.us-east-1.rds.amazonaws.com:3306/PARQUE";
@@ -194,6 +195,19 @@ public class ConnectionDB{
         }
         return respuesta;
     }
-
+    public ArrayList<Juego> getJuegos() throws SQLException{
+        ArrayList<Juego> juegos = new ArrayList<Juego>();
+        String sql = "SELECT * FROM Juego";                    
+        PreparedStatement ps = con.prepareStatement(sql);
+        ResultSet rs =ps.executeQuery();
+        while(rs.next()){
+            Juego juego = new Juego();
+            juego.setId(rs.getInt("Id"));
+            juego.setNombre(rs.getString("Nombre"));
+            juego.setPrecio("Precio");
+            juegos.add(juego);
+        } 
+        return juegos;
+    }
 }
 
