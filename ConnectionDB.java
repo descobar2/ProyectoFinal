@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
 public class ConnectionDB{
     final String HOST = "proyecto2.ctlvgikixphm.us-east-1.rds.amazonaws.com:3306/PARQUE";
     final String DB_URL = String.format("jdbc:mysql://%s", HOST);
@@ -20,13 +19,13 @@ public class ConnectionDB{
             e.printStackTrace();
         }
     }
-//funcion para ingresar personas como cliente o proveedor
-    public void newGame(String nombre, Float precio){
+//funcion para ingresar nuevo juego
+    public void newGame(String nombre, String precio){
         try{
             String sql = "INSERT INTO Juego (Nombre, Precio) VALUES (?,?)";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(2, nombre);
-            ps.setFloat(3, precio);
+            ps.setString(1, nombre);
+            ps.setString(2, precio);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,7 +110,7 @@ public class ConnectionDB{
             e.printStackTrace();
         }
     }
-    public int getPersonaID(String nombre, int tipo) throws SQLException{
+    public int getId(String nombre, int tipo) throws SQLException{
          try {
             String sql = "SELECT PersonaID FROM Persona WHERE Nombre = ? AND TipoID = ?";
             PreparedStatement ps = con.prepareStatement(sql);
@@ -119,7 +118,7 @@ public class ConnectionDB{
             ps.setInt(2,tipo);
             try(ResultSet rs = ps.executeQuery();){
                 if(rs.next()){
-                    return rs.getInt("PersonaID");
+                    return rs.getInt("Id");
                 }
             }
         } catch (Exception e) {
@@ -152,20 +151,6 @@ public class ConnectionDB{
         updateDato("Documento", "Estado", "DocumentoID", nuevoEstado, sDocumentoID);
     }
 //----------------------------------------------------------------------    
-    public void instertDB(Connection con){
-        try{ 
-            String sql = "INSERT INTO Proveedor (Nombre, Direccion, Telefono) VALUES (?,?,?)";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1,4);
-            ps.setString(2, "Allan");
-            ps.setString(3, "Guatemala");
-            ps.setString(4, "24282428");
-            ps.executeUpdate();
-
-        }catch(SQLException e){
-            e.printStackTrace();
-        }        
-    }
     public void updateDato(String tabla, String campoUpdate, String campoBus, String cantidad, String materialID){
         try{
             String sql = "UPDATE "+ tabla +" SET "+ campoUpdate +" = ? WHERE " + campoBus + " = ?";

@@ -50,3 +50,7 @@ CREATE TABLE Caja (
   FOREIGN KEY (Precio) REFERENCES Juego(Precio),
   FOREIGN KEY (FechaTiempo) REFERENCES Boleto(Fecha)
 );
+
+INSERT INTO Juego (Nombre, Precio) VALUES
+    ("Escalada","45.50");
+

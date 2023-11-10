@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 public class Gui{
     private static CardLayout cardLayout;
     private static JPanel contentPanel;
+    private ConnectionDB connection = new ConnectionDB();
 
     public void createAndShowGUI() {
         JFrame frame = new JFrame("EXTREME GAMES");
@@ -21,10 +22,14 @@ public class Gui{
         buttonPanel.setLayout(new FlowLayout());
 
         JButton createGame = new JButton("Nuevo");
+        JButton editGame = new JButton("Editar");
         JButton eraseGame = new JButton("Borrar");
         JButton buyBoletos = new JButton("Boletos");
-        JButton editGame = new JButton("Editar");
         JButton boxMoney = new JButton("Caja");
+
+        TextField nombre = new TextField(50);
+        TextField precio = new TextField(5);
+        JLabel resultado = new JLabel();
 
         buttonPanel.add(createGame);
         buttonPanel.add(editGame);
@@ -39,37 +44,37 @@ public class Gui{
         contentPanel.setLayout(cardLayout);
 
         // Vista para Crear
-        JPanel newGame = new JPanel();
+        JPanel newGameView = new JPanel();
         JButton buttonCreateGame = new JButton("Crear");
-        newGame.add(new JLabel("Juego:"));
-        newGame.add(new TextField(50));
-        newGame.add(new JLabel("Precio:"));
-        newGame.add(new TextField(5));
-        newGame.add(buttonCreateGame);
-        newGame.add(new JLabel(""));
+        newGameView.add(new JLabel("Juego:"));
+        newGameView.add(nombre);
+        newGameView.add(new JLabel("Precio:"));
+        newGameView.add(precio);
+        newGameView.add(buttonCreateGame);
+        resultado.setVisible(false);        
+        newGameView.add(resultado);
         
         // Vista para Editar juegos
-        JPanel modifiGameView = new JPanel();
+        JPanel editGameView = new JPanel();
         JButton searchGame = new JButton("Buscar");
         JButton buttonEditGame = new JButton("Editar");
-        modifiGameView.add(new JLabel("Juego:"));
-        modifiGameView.add(new TextField(45));
-        modifiGameView.add(searchGame);
-        modifiGameView.add(new JTextArea(null, 1, 35));
-
-        modifiGameView.add(buttonEditGame);
+        editGameView.add(new JLabel("Juego:"));
+        editGameView.add(new TextField(45));
+        editGameView.add(searchGame);
+        editGameView.add(new JTextArea(null, 1, 35));
+        editGameView.add(buttonEditGame);
 
         // Vista para Borrar
-        JPanel modifyView = new JPanel();
+        JPanel eraseGameView = new JPanel();
         JButton backButtonModify = new JButton("Buscar");
-        JButton deleteGame = new JButton("Borrar");
-        modifyView.add(new JLabel("Juego:"));
-        modifyView.add(new TextField(45));
-        modifyView.add(backButtonModify);
-        modifyView.add(new JTextArea(null, 1, 35));
-        modifyView.add(deleteGame);
+        JButton buttonEraseGame = new JButton("Borrar");
+        eraseGameView.add(new JLabel("Juego:"));
+        eraseGameView.add(new TextField(45));
+        eraseGameView.add(backButtonModify);
+        eraseGameView.add(new JTextArea(null, 1, 35));
+        eraseGameView.add(buttonEraseGame);
 
-        // Vista para Mostrar
+        // Vista para Boletos
         JPanel showBuyView = new JPanel();
         JButton buttonAdd = new JButton("Agregar");
         JButton buttonBuy = new JButton("Vender");
@@ -91,19 +96,21 @@ public class Gui{
         showBuyView.add(buttonAdd);
         showBuyView.add(buttonBuy);
 
+
         // Vista para Caja
-        JPanel showCaja = new JPanel();
+        JPanel showCajaView = new JPanel();
         JButton openBox = new JButton("Apertura");
         JButton closeBox = new JButton("Cierre");        
-        showCaja.add(new JTextArea("Query ventas", 23, 35));
-        showCaja.add(openBox);
-        showCaja.add(closeBox);
+        showCajaView.add(new JTextArea("Query ventas", 23, 35));
+        showCajaView.add(openBox);
+        showCajaView.add(closeBox);
 
-        contentPanel.add(newGame, "Crear");
-        contentPanel.add(modifyView, "Modificar");
-        contentPanel.add(showBuyView, "Mostrar");
-        contentPanel.add(modifiGameView, "Editar");
-        contentPanel.add(showCaja, "Caja");
+        //Paneles de vistas
+        contentPanel.add(newGameView,"Nuevo");
+        contentPanel.add(editGameView,"Editar");
+        contentPanel.add(eraseGameView,"Borrar");
+        contentPanel.add(showBuyView,"Boletos");
+        contentPanel.add(showCajaView,"Caja");
 
         mainPanel.add(contentPanel, BorderLayout.CENTER);
 
@@ -111,23 +118,37 @@ public class Gui{
         createGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(contentPanel, "Crear");
+                cardLayout.show(contentPanel, "Nuevo");
             }
         });
 
-        // Acción del botón "Modificar"
+        // Acción del botón "Editar"
+        editGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(contentPanel, "Editar");
+
+                resultado.setVisible(false);
+            }
+        });
+
+        // Acción del botón "Borrar"
         eraseGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(contentPanel, "Modificar");
+                cardLayout.show(contentPanel, "Borrar");
+                
+                resultado.setVisible(false);
             }
         });
 
-        // Acción del botón "Mostrar"
+        // Acción del botón "Vender"
         buyBoletos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(contentPanel, "Mostrar");
+                cardLayout.show(contentPanel, "Boletos");
+                
+                resultado.setVisible(false);
             }
         });
         
@@ -136,6 +157,8 @@ public class Gui{
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(contentPanel, "Caja");
+                
+                resultado.setVisible(false);
             }
         });
 
@@ -144,14 +167,21 @@ public class Gui{
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(contentPanel, "Crear");
+                connection.newGame(nombre.getText(),precio.getText());
+                resultado.setText("Registro de juego " + nombre.getText() + " exitoso.");
+                resultado.setVisible(true);
+                nombre.setText(null);
+                precio.setText(null);
             }
         });
 
-        // Acción del botón "Buscar" en la vista de Modificar
-        backButtonModify.addActionListener(new ActionListener() {
+        // Acción del botón "Editar" en la vista de Modificar
+        buttonEditGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(contentPanel, "Modificar");
+
+                resultado.setVisible(false);
             }
         });
 
@@ -160,6 +190,8 @@ public class Gui{
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(contentPanel, "Agregar");
+
+                resultado.setVisible(false);
             }
         });
 
