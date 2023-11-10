@@ -141,36 +141,59 @@ public class ConnectionDB{
             }
         return -1;
     }
-    public void updateInventario(int materialID,int nuevoDato){
-        String sMaterialID = "" + materialID;
-        String sNuevoDato = "" + nuevoDato;
-        updateDato("Material","CantDisp","MaterialID",sNuevoDato, sMaterialID);
+    public void updateGameName(String nombre, String nuevoNombre){
+        updateDato("Juego","Nombre","Nombre",nombre,nuevoNombre);
     }
-    public void updateEstado(int documentoID, String nuevoEstado){
-        String sDocumentoID = "" + documentoID;
-        updateDato("Documento", "Estado", "DocumentoID", nuevoEstado, sDocumentoID);
+    public void updateGamePrice(String nombre, String nuevoPrecio){
+        updateDato("Juego", "Precio", "Nombre", nombre, nuevoPrecio);
     }
 //----------------------------------------------------------------------    
-    public void updateDato(String tabla, String campoUpdate, String campoBus, String cantidad, String materialID){
+    public void updateDato(String tabla, String campoUpdate, String campoBus, String nombre, String nuevoDato){
         try{
             String sql = "UPDATE "+ tabla +" SET "+ campoUpdate +" = ? WHERE " + campoBus + " = ?";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1,cantidad);
-            ps.setString(2,materialID);
+            ps.setString(1,nuevoDato);
+            ps.setString(2,nombre);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public static void deleteDB(Connection con){
+//Eliminar datos--------------------------------------------------------    
+    public void eraseGame(String nombre){
+        deleteGame(nombre, con);
+    }
+    public void deleteGame(String nombre, Connection con){
         try{
-            String sql = "DELETE FROM Tarea.Proveedor WHERE ProveedorID = ?";
+            String sql = "DELETE FROM PARQUE.Juego WHERE Nombre = ?";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, 4);
+            ps.setString(1, nombre);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+//Consultas-------------------------------------------------------------
+    public String getGame(String nombre){
+        String dato = getDato("Juego","Precio","Nombre",nombre);
+        return dato;
+    }
+    public String getDato(String tabla, String campoObtener, String campoBuscar, String busqueda){
+        String respuesta="-1";
+        try{
+            String sql = "SELECT "+ campoObtener +" FROM "+ tabla +" WHERE "+ campoBuscar +" = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, busqueda);
+            ResultSet rs =ps.executeQuery();
+            if (rs.next()) {
+                respuesta = rs.getString(campoObtener);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return respuesta;
+    }
+
 }
 
