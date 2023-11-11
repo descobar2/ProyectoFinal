@@ -58,7 +58,7 @@ public class Boleto {
     public String getNombreJuego(){
         return nombreJuego;
     }
-    public String getNombreCliente(){
+    public String getNitCliente(){
         return nitCliente;
     }
 }

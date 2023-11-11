@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.sql.SQLException;
 
 public class Gui{
@@ -131,9 +132,11 @@ public class Gui{
 
         // Vista para Caja
         JPanel showCajaView = new JPanel();
-        JButton openBox = new JButton("Apertura");
-        JButton closeBox = new JButton("Cierre");        
-        showCajaView.add(new JTextArea("Query ventas", 23, 35));
+        JButton openBox = new JButton("Consultar");
+        JButton closeBox = new JButton("Cierre");
+        JTextArea textCaja = new JTextArea("Consultar ventas", 23,35);
+        closeBox.setVisible(false);        
+        showCajaView.add(textCaja);
         showCajaView.add(openBox);
         showCajaView.add(closeBox);
 
@@ -328,14 +331,28 @@ public class Gui{
         });
 
         // Acción del botón "Vender" en la vista de Boletos
-        /*buttonBuy.addActionListener(new ActionListener() {
+        openBox.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(contentPanel, "Vender");
-
+                String dato="";
+                try {
+                    for(int i = 0; i < connection.getBoleto().size(); i++){
+                        int serie = connection.getBoleto().get(i).getSerie();
+                        Date fecha = connection.getBoleto().get(i).getFecha();
+                        int cantidad = connection.getBoleto().get(i).getCantidad();
+                        String nit = connection.getBoleto().get(i).getNitCliente();
+                        
+                        dato = dato + ("Serie: A00"+serie + " Nit: "+ nit + " Cantidad: "+cantidad+" Fecha: "+fecha+"\n");
+                    }
+                    textCaja.setText(dato);
+                } catch (SQLException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
 
             }
-        });*/
+        });
         
         // Acción del botón "Editar juego"        
         editGame.addActionListener(new ActionListener() {
