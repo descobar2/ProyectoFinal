@@ -154,6 +154,42 @@ public class ConnectionDB{
         } 
         return juegos;
     }
+    public ArrayList<Boleto> getBoleto() throws SQLException{
+        ArrayList<Boleto> boletos = new ArrayList<Boleto>();
+        String sql = "SELECT * FROM Boleto";                    
+        PreparedStatement ps = con.prepareStatement(sql);
+        ResultSet rs =ps.executeQuery();
+        while(rs.next()){
+            Boleto boleto = new Boleto();
+            boleto.setId(rs.getInt("Id"));
+            boleto.setSerie(rs.getInt("Serie"));
+            boleto.setAdulto(rs.getByte("Adulto"));
+            boleto.setNino(rs.getByte("Nino"));
+            boleto.setCantida(rs.getInt("Cantidad"));
+            boleto.setFecha(rs.getDate("Fecha"));
+            boleto.setNombreJuego(rs.getString("NombreJuego"));
+            boleto.setNitCliente(rs.getString("NitCliente"));
+            boletos.add(boleto);    
+        } 
+        return boletos;
+    } 
+
+    public ArrayList<Cliente> getCliente() throws SQLException{
+        ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+        String sql = "SELECT * FROM Juego";                    
+        PreparedStatement ps = con.prepareStatement(sql);
+        ResultSet rs =ps.executeQuery();
+        while(rs.next()){
+            Cliente cliente = new Cliente();
+            cliente.setId(rs.getInt("Id"));
+            cliente.setNit(rs.getString("Nit"));
+            cliente.setNombre(rs.getString("Nombre"));
+            cliente.setDireccion("Direccion");
+            clientes.add(cliente);
+        } 
+        return clientes;
+    }
+
     public int getUltimoID(String nombreCampo, String tabla) {
         try {
             String sql = "SELECT MAX(" + nombreCampo + ") AS UltimoID FROM " + tabla;

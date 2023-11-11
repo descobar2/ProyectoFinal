@@ -95,8 +95,8 @@ public class Gui{
 
         // Vista para Boletos
         JPanel showBuyView = new JPanel();
-        JButton buttonAdd = new JButton("Agregar");
-        JButton buttonBuy = new JButton("Vender");
+        JButton buttonAdd = new JButton("Vender");
+        //JButton buttonBuy = new JButton("Vender");
         TextField textNit = new TextField(10);
         TextField textNombre = new TextField(30);
         TextField textCant = new TextField(1);
@@ -124,7 +124,7 @@ public class Gui{
         showBuyView.add(ninos);
         showBuyView.add(listJuego);
         showBuyView.add(buttonAdd);
-        showBuyView.add(buttonBuy);
+        //showBuyView.add(buttonBuy);
         showBuyView.add(new JLabel("                                                                                                                                       "));
         serie.setVisible(false);
         showBuyView.add(serie);
@@ -302,7 +302,7 @@ public class Gui{
             @Override
             public void actionPerformed(ActionEvent e) {
                 String sSerie=null;
-                cardLayout.show(contentPanel, "Agregar");
+                cardLayout.show(contentPanel, "Vender");
                 if((textNit.getText().length() > 0) && (textNombre.getText().length() > 0)
                     && (textCant.getText().length() > 0) && (adultos.isSelected() || ninos.isSelected())){
                     if(vender == false){
@@ -320,7 +320,7 @@ public class Gui{
                     ninos.setSelected(false);
                     textCant.setText(null);
                 }else{
-                    serie.setText("Debe ingresar datos para agregar");
+                    serie.setText("Debe ingresar datos para vender");
                     vender = false;                   
                 }
             serie.setVisible(true);
@@ -328,14 +328,14 @@ public class Gui{
         });
 
         // Acción del botón "Vender" en la vista de Boletos
-        buttonBuy.addActionListener(new ActionListener() {
+        /*buttonBuy.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(contentPanel, "Vender");
 
 
             }
-        });
+        });*/
         
         // Acción del botón "Editar juego"        
         editGame.addActionListener(new ActionListener() {

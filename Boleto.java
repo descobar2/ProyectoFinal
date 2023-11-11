@@ -20,7 +20,10 @@ public class Boleto {
     public void setAdulto(byte adulto){
         this.adulto = adulto;
     }
-    public void setNino(int cantida){
+    public void setNino(byte nino){
+        this.nino = nino;
+    }
+    public void setCantida(int cantida){
         this.cantidad = cantida;
     }
     public void setFecha(Date fecha){
@@ -29,7 +32,7 @@ public class Boleto {
     public void setNombreJuego(String nombreJuego){
         this.nombreJuego = nombreJuego;
     }
-    public void setNombreCliente(String nitCliente){
+    public void setNitCliente(String nitCliente){
         this.nitCliente = nitCliente;
     }
 
