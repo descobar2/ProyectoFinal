@@ -81,77 +81,14 @@ public class ConnectionDB{
         ps.setInt(3,cantida);
         ps.executeUpdate();
     }
-//funcion para validar si existe un elemento
-    public boolean validarDato(String dato){
-        try {
-            String sql = "SELECT COUNT(*) FROM Material WHERE NombreMat = ?";
-            try (PreparedStatement ps = con.prepareStatement(sql)) {
-                ps.setString(1, dato);              
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        int rowCount = rs.getInt(1);
-                        return rowCount > 0;  // Si rowCount es mayor que 0, el valor existe.
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-//funcion para crear orden de compra.
-    public void nuevaOrden(int clienteID, int productoID, int cantProd, int tipoID, String estado){
-        try {
-            String sql = "INSERT INTO Documento (ClienteID, ProductoID, CantPro, TipoID, Estado) VALUES (?,?,?,?,?)";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1,clienteID);
-            ps.setInt(2, productoID);
-            ps.setInt(3, cantProd);
-            ps.setInt(4, tipoID);
-            ps.setString(5, estado);
-            ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public int getId(String nombre, int tipo) throws SQLException{
-         try {
-            String sql = "SELECT PersonaID FROM Persona WHERE Nombre = ? AND TipoID = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1,nombre);
-            ps.setInt(2,tipo);
-            try(ResultSet rs = ps.executeQuery();){
-                if(rs.next()){
-                    return rs.getInt("Id");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-    public int getDisponible(int materialID){
-            try {
-                String sql = "SELECT CantDisp FROM Material WHERE MaterialID = ? ";
-                PreparedStatement ps = con.prepareStatement(sql);
-                ps.setInt(1,materialID);
-                    try(ResultSet rs = ps.executeQuery();){
-                        if(rs.next()){
-                            return rs.getInt("CantDisp");
-                        }
-                    }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        return -1;
-    }
+
     public void updateGameName(String nombre, String nuevoNombre){
         updateDato("Juego","Nombre","Nombre",nombre,nuevoNombre);
     }
     public void updateGamePrice(String nombre, String nuevoPrecio){
         updateDato("Juego", "Precio", "Nombre", nombre, nuevoPrecio);
     }
-//----------------------------------------------------------------------    
+//Actualizar datos------------------------------------------------------    
     public void updateDato(String tabla, String campoUpdate, String campoBus, String nombre, String nuevoDato){
         try{
             String sql = "UPDATE "+ tabla +" SET "+ campoUpdate +" = ? WHERE " + campoBus + " = ?";
@@ -232,6 +169,24 @@ public class ConnectionDB{
             e.printStackTrace();
         }
         return -1; // Si hay un error
+    }
+    //funcion para validar si existe un elemento
+    public boolean validarDato(String dato){
+        try {
+            String sql = "SELECT COUNT(*) FROM Material WHERE NombreMat = ?";
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, dato);              
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        int rowCount = rs.getInt(1);
+                        return rowCount > 0;  // Si rowCount es mayor que 0, el valor existe.
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
 

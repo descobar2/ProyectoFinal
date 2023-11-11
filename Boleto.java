@@ -8,7 +8,7 @@ public class Boleto {
     private int cantidad;
     private Date fecha;
     private String nombreJuego;
-    private String nombreCliente;
+    private String nitCliente;
 
 //Setters Boletos
     public void setId(int id){
@@ -29,8 +29,8 @@ public class Boleto {
     public void setNombreJuego(String nombreJuego){
         this.nombreJuego = nombreJuego;
     }
-    public void setNombreCliente(String nombreCliente){
-        this.nombreCliente = nombreCliente;
+    public void setNombreCliente(String nitCliente){
+        this.nitCliente = nitCliente;
     }
 
 //Getters Boletos
@@ -56,6 +56,6 @@ public class Boleto {
         return nombreJuego;
     }
     public String getNombreCliente(){
-        return nombreCliente;
+        return nitCliente;
     }
 }
