@@ -32,27 +32,30 @@ public class ConnectionDB{
             e.printStackTrace();
         }
     }
-//funcion para ingresar materiales
-    public void nuevoMaterial(String nombre, String medida, float precio){
+//funcion para ingresar boletos
+    public void setBoleto(String serie, boolean adulto, boolean nino, String cantidad, String nomJuego, String nit){
         try{
-            String sql = "INSERT INTO Material (NombreMat, Medida, PrecioMat, CantDisp) VALUES (?,?,?,?)";
+            String sql = "INSERT INTO Boleto (Serie, Adulto, Nino, Cantidad, NombreJuego, NitCliente) VALUES (?,?,?,?,?,?)";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1,nombre);
-            ps.setString(2, medida);
-            ps.setFloat(3, precio);
-            ps.setInt(4,0);
+            ps.setString(1,serie);
+            ps.setBoolean(2, adulto);
+            ps.setBoolean(3, nino);
+            ps.setString(4,cantidad);
+            ps.setString(5,nomJuego);
+            ps.setString(6,nit);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-//funcion para ingresar compra
-    public void nuevaCompra(String nombre, int cantidad){
+//funcion para ingresar cliente
+    public void setCliente(String nit, String nombre, String direccion){
         try{
-            String sql = "UPDATE Material SET CantDisp = ? WHERE NombreMat = ?";
+            String sql = "INSERT INTO Cliente (Nit, Nombre, Direccion) VALUES (?,?,?)";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, cantidad);
+            ps.setString(1,nit);
             ps.setString(2,nombre);
+            ps.setString(3,direccion);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -180,6 +183,11 @@ public class ConnectionDB{
         String dato = getDato("Juego","Precio","Nombre",nombre);
         return dato;
     }
+    public String getNit(String nit){
+        String dato = getDato("Cliente","Nit","Nit",nit);
+        return dato;
+    }
+
     public String getDato(String tabla, String campoObtener, String campoBuscar, String busqueda){
         String respuesta="-1";
         try{
@@ -208,6 +216,22 @@ public class ConnectionDB{
             juegos.add(juego);
         } 
         return juegos;
+    }
+    public int getUltimoID(String nombreCampo, String tabla) {
+        try {
+            String sql = "SELECT MAX(" + nombreCampo + ") AS UltimoID FROM " + tabla;
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getInt("UltimoID"); // Obtiene el valor del último ID
+            } else {
+                return -1; // Si no hay resultados
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1; // Si hay un error
     }
 }
 

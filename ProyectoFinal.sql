@@ -6,7 +6,7 @@ USE PARQUE;
 -- Crear la tabla Juego
 CREATE TABLE Juego (
   Id INT AUTO_INCREMENT PRIMARY KEY,
-  NombreJuego VARCHAR(50) NOT NULL,
+  Nombre VARCHAR(50) NOT NULL,
   Precio DECIMAL(10,2) NOT NULL
 );
 
@@ -28,11 +28,11 @@ CREATE TABLE Boleto (
   Adulto BIT NOT NULL,
   Nino BIT NOT NULL,
   Cantidad INT NOT NULL,
-  Fecha DATETIME NOT NULL,
+  Fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   NombreJuego VARCHAR(50) NOT NULL,
   NitCliente VARCHAR(20) NOT NULL,
-  FOREIGN KEY (NombreJuego) REFERENCES Juego(Nombre),
-  FOREIGN KEY (NitCliente) REFERENCES Cliente(Nit)
+  FOREIGN KEY (NitCliente) REFERENCES Cliente(Nit),
+  FOREIGN KEY (NombreJuego) REFERENCES Juego(Nombre)
 );
 -- Agregar indice
 ALTER TABLE `Boleto` ADD INDEX(Cantidad);
@@ -53,4 +53,7 @@ CREATE TABLE Caja (
 
 INSERT INTO Juego (Nombre, Precio) VALUES
     ("Escalada","45.50");
-
+INSERT INTO Boleto (Serie, `Adulto`, `Nino`, `Cantidad`, `NombreJuego`,`NitCliente`) VALUES
+    (100,1,0,2,"Escalada","46287973");
+INSERT INTO Cliente(Nit, Nombre, Direccion) VALUES
+    ("46287973","Marco Antonio", "Ciudad");

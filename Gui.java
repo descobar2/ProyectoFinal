@@ -8,7 +8,9 @@ import java.sql.SQLException;
 public class Gui{
     private static CardLayout cardLayout;
     private static JPanel contentPanel;
+    private boolean vender = false;
     private ConnectionDB connection = new ConnectionDB();
+
 
     public void createAndShowGUI() throws SQLException {
         JFrame frame = new JFrame("EXTREME GAMES");
@@ -101,25 +103,31 @@ public class Gui{
         TextField textDir = new TextField(43);
         JCheckBox adultos = new JCheckBox("Adultos");
         JCheckBox ninos = new JCheckBox("Niños");
+        JLabel serie = new JLabel();
+        
         JComboBox<String> listJuego = new JComboBox<>();
         listJuego.removeAllItems();
         for(int i = 0; i < connection.getJuegos().size(); i++){
             String dato = connection.getJuegos().get(i).getNombre();
             listJuego.addItem(dato);
         }
+
         showBuyView.add(new JLabel("Nit:"));
         showBuyView.add(textNit);
         showBuyView.add(new JLabel("Nombre:"));
         showBuyView.add(textNombre);
+        showBuyView.add(new JLabel("    Dirección:"));
+        showBuyView.add(textDir);
         showBuyView.add(new JLabel("Cantidad:"));
         showBuyView.add(textCant);
         showBuyView.add(adultos);
         showBuyView.add(ninos);
         showBuyView.add(listJuego);
-        showBuyView.add(new JLabel("    Dirección:"));
-        showBuyView.add(textDir);
         showBuyView.add(buttonAdd);
         showBuyView.add(buttonBuy);
+        showBuyView.add(new JLabel("                                                                                                                                       "));
+        serie.setVisible(false);
+        showBuyView.add(serie);
 
         // Vista para Caja
         JPanel showCajaView = new JPanel();
@@ -293,11 +301,29 @@ public class Gui{
         buttonAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String sSerie=null;
                 cardLayout.show(contentPanel, "Agregar");
-
-                crear.setVisible(false);
-                edit.setVisible(false);
-                erase.setVisible(false);
+                if((textNit.getText().length() > 0) && (textNombre.getText().length() > 0)
+                    && (textCant.getText().length() > 0) && (adultos.isSelected() || ninos.isSelected())){
+                    if(vender == false){
+                        sSerie = String.valueOf(1+connection.getUltimoID("Serie","Boleto"));
+                        serie.setText("Serie: A00"+ sSerie);
+                        vender = true;
+                    }
+                    if(connection.getNit(textNit.getText()) != "-1"){
+                        connection.setBoleto(sSerie,adultos.isSelected(),ninos.isSelected(),textCant.getText(),String.valueOf(listJuego.getSelectedItem()),textNit.getText());
+                    }else{
+                        connection.setCliente(textNit.getText(),textNombre.getText(),textDir.getText());
+                        connection.setBoleto(sSerie,adultos.isSelected(),ninos.isSelected(),textCant.getText(),String.valueOf(listJuego.getSelectedItem()),textNit.getText());
+                    }
+                    adultos.setSelected(false);
+                    ninos.setSelected(false);
+                    textCant.setText(null);
+                }else{
+                    serie.setText("Debe ingresar datos para agregar");
+                    vender = false;                   
+                }
+            serie.setVisible(true);
             }
         });
 
@@ -306,6 +332,8 @@ public class Gui{
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(contentPanel, "Vender");
+
+
             }
         });
         
