@@ -61,27 +61,6 @@ public class ConnectionDB{
             e.printStackTrace();
         }
     }
-//funcion para ingresar nuevo producto
-    public void nuevoProducto(String nombre, Float precio){
-        try {
-            String sql = "INSERT INTO Producto (NombrePro, PrecioProd) VALUES (?, ?)";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1,nombre);
-            ps.setFloat(2, precio);
-            ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public void asociarMaterial(int productoId, int materialID, int cantida) throws SQLException{
-        String sql = "INSERT INTO ProductoMaterial (ProductoID, MaterialID, Cantidad) VALUES (?,?,?)";
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setInt(1, productoId);
-        ps.setInt(2,materialID);
-        ps.setInt(3,cantida);
-        ps.executeUpdate();
-    }
-
     public void updateGameName(String nombre, String nuevoNombre){
         updateDato("Juego","Nombre","Nombre",nombre,nuevoNombre);
     }
